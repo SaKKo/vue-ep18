@@ -40,13 +40,17 @@
 import axios from 'axios'
 export default {
   asyncData(ctx) {
-    const url = `https://api.jikan.moe/v3/search/manga?q=${ctx.route.query.q}&page=1`
-    return axios.get(url).then((res) => {
-      return {
-        query: ctx.route.query.q,
-        results: res.data.results
-      }
-    })
+    if (ctx.route.query && ctx.route.query.q && ctx.route.query.q.length >= 3) {
+      const url = `https://api.jikan.moe/v3/search/manga?q=${ctx.route.query.q}&page=1`
+      return axios.get(url).then((res) => {
+        return {
+          query: ctx.route.query.q,
+          results: res.data.results
+        }
+      })
+    } else {
+      return {}
+    }
   },
   data() {
     return {
