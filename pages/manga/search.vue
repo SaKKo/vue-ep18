@@ -39,14 +39,28 @@
 <script>
 import axios from 'axios'
 export default {
+  asyncData(ctx) {
+    const url = `https://api.jikan.moe/v3/search/manga?q=${ctx.route.query.q}&page=1`
+    return axios.get(url).then((res) => {
+      return {
+        query: ctx.route.query.q,
+        results: res.data.results
+      }
+    })
+  },
   data() {
     return {
       query: '',
       results: []
     }
   },
+  mounted() {
+    console.error('MOUNTED RESULTS', this.results)
+  },
   methods: {
     handleSearchManga() {
+      this.$router.replace({ name: 'manga-search', query: { q: this.query } })
+
       const url = `https://api.jikan.moe/v3/search/manga?q=${this.query}&page=1`
       axios.get(url).then((res) => {
         console.log(res.data)
